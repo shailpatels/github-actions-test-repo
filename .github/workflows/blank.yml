@@ -1,0 +1,25 @@
+name: Run VirtualBox on macOS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  install-vbox:
+    runs-on: macos-13
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v3
+
+      - name: install virtual box 7.0
+        run: |
+          curl -LO https://download.virtualbox.org/virtualbox/7.0.10/VirtualBox-7.0.10-158379-OSX.dmg
+          hdiutil mount VirtualBox-7.0.10-158379-OSX.dmg
+          sudo installer -pkg /Volumes/VirtualBox/VirtualBox.pkg -target /
+          hdiutil unmount /Volumes/VirtualBox
+
+      - name: Test VirtualBox
+        run: |
+          vboxmanage --version
